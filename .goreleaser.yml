@@ -39,15 +39,3 @@ changelog:
       - "^test:"
       - "^chore:"
 
-brews:
-  - name: secretwatch
-    repository:
-      owner: "{{ .Env.GITHUB_REPOSITORY_OWNER }}"
-      name: homebrew-tap
-    homepage: https://github.com/{{ .Env.GITHUB_REPOSITORY }}
-    description: Track secret rotation health across AWS, Vault, GCP, and GitHub
-    license: MIT
-    install: |
-      bin.install "secretwatch"
-    test: |
-      system "#{bin}/secretwatch", "--help"
