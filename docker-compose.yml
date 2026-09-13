@@ -1,0 +1,35 @@
+services:
+  # One-off scan + alert (run with: docker compose run --rm scan-and-alert)
+  scan-and-alert:
+    image: ghcr.io/leylmordor/secretwatch:latest
+    command: sh -c "secretwatch scan && secretwatch alert"
+    volumes:
+      - secretwatch-data:/root/.secretwatch
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
+      - VAULT_TOKEN
+      - GITHUB_TOKEN
+      - SLACK_WEBHOOK_URL
+
+  # Always-on dashboard (run with: docker compose up dashboard)
+  dashboard:
+    image: ghcr.io/leylmordor/secretwatch:latest
+    command: serve
+    ports:
+      - "8080:8080"
+    volumes:
+      - secretwatch-data:/root/.secretwatch
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
+      - VAULT_TOKEN
+      - GITHUB_TOKEN
+      - SLACK_WEBHOOK_URL
+      - SECRETWATCH_WEB_HOST=0.0.0.0
+    restart: unless-stopped
+
+volumes:
+  secretwatch-data:

@@ -1,0 +1,60 @@
+stores:
+  # AWS Secrets Manager — one entry per account/region group.
+  # Remove this section entirely to disable AWS scanning.
+  aws:
+    - regions:
+        - us-east-1
+        - us-west-2
+      # profile: my-aws-profile  # optional; uses default credential chain if omitted
+      # label: production
+
+  # AWS IAM access keys — one entry per account.
+  # Remove this section entirely to disable IAM key scanning.
+  aws_iam:
+    - # profile: my-aws-profile
+      # label: production
+
+  vault:
+    enabled: false
+    address: http://127.0.0.1:8200
+    token: ${VAULT_TOKEN}
+    paths:
+      - secret/
+    # namespace: my-namespace  # optional, for Vault Enterprise
+
+  # GCP Secret Manager — one entry per project.
+  # Remove this section entirely to disable GCP scanning.
+  gcp:
+    # - project: my-gcp-project
+    #   label: production
+
+  # GCP Service Account keys — one entry per project.
+  # Remove this section entirely to disable service account key scanning.
+  gcp_sa_keys:
+    # - project: my-gcp-project
+
+  github:
+    enabled: false
+    org: my-github-org
+    token: ${GITHUB_TOKEN}
+
+rotation_policy:
+  default_max_age_days: 90
+  overrides:
+    - pattern: "prod-*"
+      max_age_days: 30
+    - pattern: "dev-*"
+      max_age_days: 180
+
+alerts:
+  slack_webhook_url: ${SLACK_WEBHOOK_URL}
+  notify_on:
+    - overdue
+    - warning
+
+# Default: ~/.secretwatch/cache.db (~ is expanded automatically)
+# db_path: ~/.secretwatch/cache.db
+
+web:
+  port: 8080
+  # host: 127.0.0.1  # bind address; set to 0.0.0.0 to expose on all interfaces (e.g. Docker)

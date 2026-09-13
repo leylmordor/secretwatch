@@ -1,0 +1,7 @@
+/secretwatch
+dist/
+*.db
+seed_demo.go
+.claude/
+.remember/
+~/
